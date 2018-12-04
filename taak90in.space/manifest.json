@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "1. Start play with initial amount: 20, index: 1.30 after see 1 burst less than 1.30.  2. Play until loose 3 times. if 3th burst < 1.30 then quit playing.  3. Wait 10 games then until see 2 less than 1.30 then play with compensation amount luckily!.  4. if win, start with initial amount: 20",
+  "name": "1. Start play after 2 new burst with initial amount: 20, index: 1.30 after see 1 burst less than 1.30.  2. Play until loose 3 times. if 3th burst < 1.30 then quit playing.  3. Wait 10 games then until see 2 less than 1.30 then play with compensation amount luckily!.  4. if win, start with initial amount: 20",
   "description": "This extension read data from DOM elements in page and click on buttons",
   "version": "1.1",
 
