@@ -11,6 +11,7 @@
 //                                          Not after: big fat green
 //                                          Not after: green green 1.46 green 1.76 
 //                                          Not after: green green green 1.37  
+//                                          Not after: green green green 1.11 
 //                                          Not after: 4 consecutive green play
 //                                          Not after: 5 consecutive green play
 //                                          یکی در میون آخری زیر 1.40 برو تو
@@ -81,13 +82,21 @@ function CheckForNewBurstEveryOneSecond() {
                 if (newBurst < index) {   // loosing when playing: calculate loose count
                     loosesCount++;
                     loosesSum = betAmount + loosesSum;
-                    if (loosesCount >= 3) {
+                    if (loosesCount == 1) {
+                        index = 1.3;
+                    }
+                    else if (loosesCount == 2) {
+                        index = 1.2;
+                    }
+                    else if (loosesCount >= 3) {
+                        index = 1.2;
                         playing = false;
                     }
                 }
                 else if (newBurst >= index) {  // winning
                     loosesCount = 0;
                     loosesSum = 0;
+                    index = 1.3;
                 }
             }
             else if (!playing) {             // if not play because of: 1.first time  2. loose 3th or 4th time           
@@ -98,7 +107,7 @@ function CheckForNewBurstEveryOneSecond() {
                     }
                 }
                 else if (loosesCount >= 3) {
-                    if (newBurst >= 1.80) {
+                    if (IsSituationSafe) {
                         playing = true;
                     }
                 }
@@ -132,6 +141,7 @@ function CheckForNewBurstEveryOneSecond() {
             betAmount = Math.round(((ExpectedProfit[loosesCount] + loosesSum) - 0.4) / (index - 1));
             console.log("looseCount: ", loosesCount, "  looseSum: ", loosesSum, "   betAmount: ", betAmount);
             console.log("playing: ", playing, "  greenLight: ", playingForFirstTime, "  interest: ", interest);
+            console.log("playingForFirsttime: ", playingForFirstTime, "  entry: ", newEntry, "  interest: ", interest);
 
             // wait 4 second and act:
             setTimeout(WaitForFourSeconds, 4000);
@@ -152,11 +162,20 @@ function WaitForFourSeconds() {
     if (playing) {
         document.getElementsByClassName("cashout-amount")[0].value = index;
         document.getElementsByClassName("game-amount")[0].value = betAmount;
-        var betButton = document.getElementsByClassName("place-bet")[0];
-        betButton.click();
+        // var betButton = document.getElementsByClassName("place-bet")[0];
+        // betButton.click();
     }
 
     // activate waiting for new burst again:
     waitForNewBurst = setInterval(CheckForNewBurstEveryOneSecond, 1000);
 }
 
+function IsSituationSafe() {
+    if (newEntry > 5) {
+        
+    }
+    else {
+        return false;
+    }
+
+}
