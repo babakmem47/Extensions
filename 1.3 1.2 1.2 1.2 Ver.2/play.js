@@ -207,6 +207,10 @@ function IsSituationSafe() {
             console.log("green green green <1.2 <1.2 => PLAY");
             return true;
         }        
+        else if (fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
+            console.log("green <1.2 green green <1.2 => PLAY");
+            return true;
+        }        
         else if (twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
             console.log("<1.2 green <1.2 => PLAY");
             return true;
