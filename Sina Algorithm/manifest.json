@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+  
+    "name": " index: 4.00 WantedProfit:[250 each round] interest: 10000 stop playing after 8 loose",
+    "description": "This extension play with 4.00 index and stop after 8 loose",
+    "version": "1.1",
+  
+    "icons": { "16": "injection_16.png",
+             "48": "injection_48.png",
+            "128": "injection_128.png" },  
+    "content_scripts": [{
+      "matches": ["http://taak90in.space/games/crash/*"],
+      "js": ["siniley.js"]
+    }]
+  }
+  

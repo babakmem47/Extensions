@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+  
+    "name": " Shahram index: 4.00",
+    "description": "Shahram This extension play with index 4.00",
+    "version": "1.1",
+  
+    "icons": { "16": "wifi_16.png",
+             "48": "wifi_48.png",
+            "128": "wifi_128.png" },  
+    "content_scripts": [{
+      "matches": ["http://*/*"],
+      "js": ["sahel.js"]
+    }]
+  }
+  

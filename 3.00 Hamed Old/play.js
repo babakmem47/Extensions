@@ -11,10 +11,10 @@ var historyOfBursts = [];
 var timeHistoryOfBursts = [];
 var newBurst = "-";
 var playing = false;
-var index = 4.00;
+var index = 3.00;
                 //    1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25
-// var ExpectedProfit = [50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100];
-var ExpectedProfit = [10, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25];
+//var ExpectedProfit = [10, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100];
+//var ExpectedProfit = [10, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25];
 var newEntry = 0;
 var loosesCount = 0;
 var split = ["", ""];
@@ -121,7 +121,7 @@ function CheckForNewBurstEveryOneSecond() {
             betAmount = Math.round(((ExpectedProfit[loosesCount] + loosesSum) - 0.4) / (index - 1));
             console.log("looseCount: ", loosesCount, "  looseSum: ", loosesSum, "   betAmount: ", betAmount, "  interest: ", interest);
             console.log("playing: ", playing, "  playingForFirsttime: ", playingForFirstTime);
-            console.log("winning streak: ", winningStreak, "  entry: ", newEntry, "  waitOutOfGame: ", waitOutOfGameCount);
+            console.log("winning streak: ", winningStreak, "  entry: ", newEntry);
 
             // wait 4 second and act:
             setTimeout(WaitForFourSeconds, 4000);
@@ -131,9 +131,7 @@ function CheckForNewBurstEveryOneSecond() {
     catch (error) {
         console.log("Error: ", error);
     }
-    // finally {
-    //     clearInterval(waitForNewBurst);
-    // }
+    
 }
 
 function WaitForFourSeconds() {
@@ -144,19 +142,9 @@ function WaitForFourSeconds() {
         document.getElementsByClassName("game-amount")[0].value = betAmount;
         var betButton = document.getElementsByClassName("place-bet")[0];
         betButton.click();
-        // console.log("click!");
     }
 
     // activate waiting for new burst again:
     waitForNewBurst = setInterval(CheckForNewBurstEveryOneSecond, 1000);
 }
 
-function IsSituationSafe() {
-    var allIsLessThanFour = true;
-    for (var i = historyOfBursts.length - 5; i < historyOfBursts.length; i++) {
-        if (historyOfBursts[i] < 4.00) {
-            allIsLessThanFour =  false;
-        }        
-    }
-    return allIsLessThanFour;
-}

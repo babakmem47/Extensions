@@ -14,7 +14,7 @@ var playing = false;
 var index = 4.00;
                 //    1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25
 // var ExpectedProfit = [50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100];
-var ExpectedProfit = [10, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25];
+var ExpectedProfit = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 var newEntry = 0;
 var loosesCount = 0;
 var split = ["", ""];
@@ -121,7 +121,6 @@ function CheckForNewBurstEveryOneSecond() {
             betAmount = Math.round(((ExpectedProfit[loosesCount] + loosesSum) - 0.4) / (index - 1));
             console.log("looseCount: ", loosesCount, "  looseSum: ", loosesSum, "   betAmount: ", betAmount, "  interest: ", interest);
             console.log("playing: ", playing, "  playingForFirsttime: ", playingForFirstTime);
-            console.log("winning streak: ", winningStreak, "  entry: ", newEntry, "  waitOutOfGame: ", waitOutOfGameCount);
 
             // wait 4 second and act:
             setTimeout(WaitForFourSeconds, 4000);
