@@ -1,5 +1,7 @@
 ///////////////////////////////////    Strategy    ////////////////////////////////////////////////
-
+// 1. Play with index: 3.00 until loose 10 times in a row.
+// 2. After 10th lost, change index: 1.20 and wait until the proper situation.
+// 3. play with index: 1.20 two times until win. If win change index to 3.00
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -9,7 +11,7 @@ var timeHistoryOfBursts = [];
 var newBurst = "-";
 var playing = false;
 var index = 3.00;
-//                    1   2   3   4   5   6   7   8   9   10  11 12 13 14 15 16   17   18   19    20    21     22    23    24    25    26     27     28      29
+//                    0   1   2   3   4   5   6   7   8   9   10  11 12 13 14 15 16   17   18   19    20    21     22    23    24    25    26     27     28      29
 var ExpectedProfit = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0];
 var newEntry = 0;
 var loosesCount = 0;
@@ -43,7 +45,7 @@ function CheckForNewBurstEveryOneSecond() {
                     loosesSum = betAmount + loosesSum;
                     index = 3.00;
                     winningStreak++;
-                    if (loosesCount > 11) {
+                    if (loosesCount > 10) {
                         index = 1.2;
                         playing = false;
                     }
@@ -56,7 +58,7 @@ function CheckForNewBurstEveryOneSecond() {
                     waitOutOfGameCount = 0;
                 }
             }
-            else if (!playing) {             // if not play because of: 1.first time  2. loose 11th   
+            else if (!playing) {             // if not play because of: 1.first time  2. loose 10th times   
                 waitOutOfGameCount++;
                 if (playingForFirstTime) {
                     if (newEntry >= 1) {  // counting new bursts until reach 2 to play for first time
@@ -64,7 +66,7 @@ function CheckForNewBurstEveryOneSecond() {
                         playingForFirstTime = false;
                     }
                 }
-                else if (loosesCount > 11) {
+                else if (loosesCount > 10) {
                     var safe = IsSituationSafe();
                     console.log("safe: ", safe);
                     if (safe) {
