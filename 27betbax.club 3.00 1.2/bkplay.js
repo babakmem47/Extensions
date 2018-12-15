@@ -11,8 +11,8 @@ var timeHistoryOfBursts = [];
 var newBurst = "-";
 var playing = false;
 var index = 3.00;
-//                    0   1   2   3   4   5   6   7   8   9   10  11 12 13 14 15 
-var ExpectedProfit = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0];
+//                     0    1    2    3    4    5    6   7  8  9 10  11 12 13 14 15 
+var ExpectedProfit = [100, 100, 100, 100, 100, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 var newEntry = 0;
 var loosesCount = 0;
 var split = ["", ""];
@@ -22,7 +22,7 @@ var loosesSum = 0;
 var playingForFirstTime = true;
 var waitOutOfGameCount = 0;
 var winningStreak = 0;
-var looseThreshold = 10;
+var looseThreshold = 6;
 
 window.onload = function () {
     console.log("window loaded");
@@ -172,6 +172,7 @@ function IsSituationSafe() {
             return true;
         }
 
+        // loose: g g 0.00 3.11 5.50 1.89 [2.27 8.35 2.08 1.17 1.03 1.07] 2.71  
         // else if (fourBeforeLast > 1.79 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {
         //     console.log("green green green <1.2 <1.2 => PLAY");
         //     return true;

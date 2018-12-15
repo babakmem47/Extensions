@@ -9,7 +9,7 @@
            "48": "software-properties_48.png",
           "128": "software-properties_128.png" },  
   "content_scripts": [{
-    "matches": ["http://taak90in.space/games/crash/*"],
+    "matches": ["http://*/*"],
     "js": ["archiveHistory.js"]
   }]
 }
