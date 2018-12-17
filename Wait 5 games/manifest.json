@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+  
+    "name": "Wait 5 games play with index: 3.00  => 9 round, index 2.50 => 8 round, index 2.00 => one last round",
+    "description": "Wait 5 games then play with index: 3.00 for 9 round, then play with index 2.50 for 8 round, then play with index 2.00 for one last round",
+    "version": "1.1",
+  
+    "icons": { "16": "video_16.png",
+             "48": "video_48.png",
+            "128": "video_128.png" },  
+    "content_scripts": [{
+      "matches": ["http://taak90in.space/games/crash/*"],
+      "js": ["wait5.js"]
+    }]
+  }
+  
