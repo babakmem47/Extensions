@@ -11,8 +11,13 @@ var timeHistoryOfBursts = [];
 var newBurst = "-";
 var playing = false;
 var index = 3.00;
+//                    0  1  2  3  4  5  6  7  8  9 10  11 12 13 14 15 
+var ExpectedProfit = [2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0];
 //                    0   1   2   3   4   5   6   7   8   9   10  11 12 13 14 15 
-var ExpectedProfit = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0];
+//var ExpectedProfit = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0];
+var currentNecessaryAmount = MustHaveAfterAllLooses(ExpectedProfit);
+var nextProfitArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var nextNecessaryAmount = 0;
 var newEntry = 0;
 var loosesCount = 0;
 var split = ["", ""];
@@ -39,6 +44,12 @@ function CheckForNewBurstEveryOneSecond() {
             // stop waiting for new burst(for now!):
             clearInterval(waitForNewBurst);
 
+            //calculate remain interest:   // I comment it because I dont want to play with my all money!
+            split = document.getElementsByClassName("top-link chips-amount")[0].innerHTML.split(" ")[0].split(",");
+            interest = split[0].concat(split[1]);
+
+
+            
             newEntry++;
             if (playing) {
                 if (newBurst < index) {   // loosing when playing: calculate loose count
@@ -57,6 +68,14 @@ function CheckForNewBurstEveryOneSecond() {
                     loosesSum = 0;
                     index = 3.00;
                     waitOutOfGameCount = 0;
+                    if (interest > nextNecessaryAmount) {    // if interest be enough to increase profit
+                        for (var i = 0; i < ExpectedProfit.length; i++) {
+                            ExpectedProfit[i] = nextProfitArray[i];
+                        }
+                        CalculateNextExpectedProfitAndNextNecessaryAmount();
+                        console.log("Next Profit Array: ", nextProfitArray);
+                        console.log("Next Necessary Amount: ", nextNecessaryAmount);
+                    }
                 }
             }
             else if (!playing) {             // if not play because of: 1.first time  2. loose 10th times   
@@ -64,6 +83,15 @@ function CheckForNewBurstEveryOneSecond() {
                     if (newEntry >= 1) {  // counting new bursts until reach 2 to play for first time
                         playing = true;
                         playingForFirstTime = false;
+                        // calculate next necessary amount
+                        for (var i = 0; i < ExpectedProfit.length; i++) {
+                            nextProfitArray[i] = ExpectedProfit[i];
+                        }
+                        console.log("initialize next profit array: ", nextProfitArray);
+                        CalculateNextExpectedProfitAndNextNecessaryAmount();
+                        console.log("after calculate => profit array: ", nextProfitArray);
+                        console.log("after calculate => next necessary amount: ", nextNecessaryAmount);
+                        
                     }
                 }
                 else if (loosesCount > looseThreshold) {
@@ -76,33 +104,12 @@ function CheckForNewBurstEveryOneSecond() {
                 waitOutOfGameCount++;
             }
 
-            //calculate remain interest:   // I comment it because I dont want to play with my all money!
-            split = document.getElementsByClassName("top-link chips-amount")[0].innerHTML.split(" ")[0].split(",");
-            interest = split[0].concat(split[1]);
-
-
+            
             historyOfBursts.push(newBurst);
 
-            ////// increase profit (if possible) depend on interest grow ///////////////////////
-            // console.log(ExpectedProfit);
-            // ExpectedProfit[0]++;
-            // console.log(ExpectedProfit);
-            // var sum = 0;
-            // for (var i = 0; i < ExpectedProfit.length; i++) {
-            //     sum += Math.round(((ExpectedProfit[i] + sum) - 0.4) / (index - 1));
-            // }
-            // console.log("sum: ", sum);
-            // if (sum < interest) {
-            //     // successfully increase ExpectedProfit!!  because interest is enough
-            // }
-            // else {
-            //     ExpectedProfit[0]--;    // interest is not enough. So rollback to previous value;
-            // }
-            ////////////////////////////////////////////////////////////////////////////////////
-
-            // console.log(ExpectedProfit);
+          
             betAmount = Math.round(((ExpectedProfit[loosesCount] + loosesSum) - 0.4) / (index - 1));
-            console.log("looseCount: ", loosesCount, "  looseSum: ", loosesSum, "   betAmount: ", betAmount, "  interest: ", interest);
+            console.log("looseCount: ", loosesCount, "  looseSum: ", loosesSum, "   betAmount: ", betAmount, "  interest: ", interest, "  nextAmount: ", nextNecessaryAmount);
             console.log("playing: ", playing, "  playingForFirsttime: ", playingForFirstTime);
             console.log("index: ", index, "  entry: ", newEntry, "  waitOutOfGame: ", waitOutOfGameCount);
 
@@ -248,4 +255,41 @@ function IsSituationSafe() {
         return false;
     }
 
+}
+
+function MustHaveAfterAllLooses(ProfitArray) {    
+    var index1 = 3.00;
+    var looseTolerance1 = 10;
+    var index2 = 1.20;
+    var looseTolerance2 = 2;    
+    var sum = 0;
+    var bet = 0;
+    for (var i = 0; i <= looseTolerance1; i++) {
+        bet = Math.round(((ProfitArray[i] + sum) - 0.4) / (index1 - 1));
+        sum += bet;
+    }
+    for (var i = looseTolerance1+1; i <= looseTolerance1 + looseTolerance2; i++) {
+        bet = Math.round(((ProfitArray[i] + sum) - 0.4) / (index2 - 1));
+        sum += bet;
+    }
+    return sum;
+}
+
+function CalculateNextExpectedProfitAndNextNecessaryAmount() {
+    nextNecessaryAmount = 0;
+    while (currentNecessaryAmount >= nextNecessaryAmount) {
+        //calculate Next Necessary Amount:
+        var indexForChange = 0;
+        var valueOfFirstElement = nextProfitArray[0];
+        for (var i = 1; i < 5; i++) {
+            if (nextProfitArray[i] !=  valueOfFirstElement) {
+                indexForChange = i;
+                break;
+            }
+        }
+        nextProfitArray[indexForChange]++;
+        nextNecessaryAmount = MustHaveAfterAllLooses(nextProfitArray);
+        // console.log(nextNecessaryAmount);
+        // console.log(NextExpectedProfitArray);
+    }
 }

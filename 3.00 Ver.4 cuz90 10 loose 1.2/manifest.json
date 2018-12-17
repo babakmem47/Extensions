@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+  
+    "name": " index: 3.00 11 round(10 looses) index 1.2 two round",
+    "description": "This extension play with 3.00 index 11 round",
+    "version": "1.1",
+  
+    "icons": { "16": "agt_16.png",
+             "48": "agt_48.png",
+            "128": "agt_128.png" },  
+    "content_scripts": [{
+      "matches": ["http://cuz90.com/games/crash/*"],
+      "js": ["bkplay.js"]
+    }]
+  }
+  
