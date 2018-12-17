@@ -214,10 +214,10 @@ function IsSituationSafe() {
             console.log("<1.2 green green <1.2 <1.2 => PLAY");
             return true;
         }
-        else if (fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
-            console.log("green <1.2 green green <1.2 => PLAY");
-            return true;
-        }        
+        // else if (fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
+        //     console.log("green <1.2 green green <1.2 => PLAY");
+        //     return true;
+        // }        
         else if (fourBeforeLast <= 1.20 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.40) {
             console.log("<1.2  <1.2 green green <1.3  => PLAY");
             return true;
@@ -238,11 +238,11 @@ function IsSituationSafe() {
         } 
         
         if (waitOutOfGameCount > 20 && loosesCount == looseThreshold + 1) {  // if it is first loose
-            if (fourBeforeLast < 1.30 && threeBeforeLast <= 1.30 && twoBeforeLast <= 1.40 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
-                console.log("<1.3 <1.3 <1.4 green <1.2 => PLAY");
-                return true;
-            }
-            else if (fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
+            // if (fourBeforeLast < 1.30 && threeBeforeLast <= 1.30 && twoBeforeLast <= 1.40 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
+            //     console.log("<1.3 <1.3 <1.4 green <1.2 => PLAY");
+            //     return true;
+            // }
+            if (fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
                 console.log("red green red green red => PLAY");
                 return true;
             } 
