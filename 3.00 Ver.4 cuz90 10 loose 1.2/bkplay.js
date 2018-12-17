@@ -190,6 +190,10 @@ function IsSituationSafe() {
             console.log("4*red green green red green => PLAY");
             return true;
         } 
+        else if (sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
+            console.log("4*red green red red green => PLAY");
+            return true;
+        } 
         else if (eightBeforeLast < 1.80 && sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast > 1.79 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
             console.log("4*red green green green red green => PLAY");
             return true;
