@@ -184,10 +184,10 @@ function IsSituationSafe() {
             console.log("<1.2  <1.2 green green <1.3  => PLAY");
             return true;
         }
-        else if (fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
-            console.log("red red red red green <1.2  => PLAY");
-            return true;
-        }                
+        // else if (fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
+        //     console.log("red red red red green <1.2  => PLAY");
+        //     return true;
+        // }                
         else if (fiveBeforeLast > 1.79 && fourBeforeLast > 1.79 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
             console.log("green green green red green <1.2 => PLAY");
             return true;
