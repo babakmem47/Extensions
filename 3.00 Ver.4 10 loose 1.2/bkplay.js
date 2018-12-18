@@ -12,7 +12,7 @@ var newBurst = "-";
 var playing = false;
 var index = 3.00;
 //                    0  1  2  3  4  5  6  7  8  9 10  11 12 13 14 15 
-var ExpectedProfit = [2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0];
+var ExpectedProfit = [4, 4, 3, 3, 3, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0];
 //                    0   1   2   3   4   5   6   7   8   9   10  11 12 13 14 15 
 //var ExpectedProfit = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0];
 var currentNecessaryAmount = MustHaveAfterAllLooses(ExpectedProfit);
@@ -51,12 +51,19 @@ function CheckForNewBurstEveryOneSecond() {
 
             
             newEntry++;
+            var situationIsSafe = false;
             if (playing) {
                 if (newBurst < index) {   // loosing when playing: calculate loose count
                     loosesCount++;
                     loosesSum = betAmount + loosesSum;
-                    index = 3.00;
-                    winningStreak++;
+                    if (IsSituationSafe()) {
+                        index = 1.2;
+                        console.log("situaltion safe!");
+                        situationIsSafe = true;
+                    }
+                    else {
+                        index = 3.00;
+                    }
                     if (loosesCount > looseThreshold) {
                         index = 1.2;
                         playing = false;
@@ -66,7 +73,14 @@ function CheckForNewBurstEveryOneSecond() {
                 else if (newBurst >= index) {  // winning
                     loosesCount = 0;
                     loosesSum = 0;
-                    index = 3.00;
+                    if (IsSituationSafe()) {
+                        index = 1.2;
+                        console.log("situaltion safe!");
+                        situationIsSafe = true;
+                    }
+                    else {
+                        index = 3.00;
+                    }
                     waitOutOfGameCount = 0;
                     if (interest > nextNecessaryAmount) {    // if interest be enough to increase profit
                         for (var i = 0; i < ExpectedProfit.length; i++) {
@@ -108,7 +122,10 @@ function CheckForNewBurstEveryOneSecond() {
             historyOfBursts.push(newBurst);
 
           
-            betAmount = Math.round(((ExpectedProfit[loosesCount] + loosesSum) - 0.4) / (index - 1));
+            betAmount = Math.round(((ExpectedProfit[loosesCount] + loosesSum)) / (index - 1));
+            if (situationIsSafe) {
+                betAmount += 50;
+            }
             console.log("looseCount: ", loosesCount, "  looseSum: ", loosesSum, "   betAmount: ", betAmount, "  interest: ", interest, "  nextAmount: ", nextNecessaryAmount);
             console.log("playing: ", playing, "  playingForFirsttime: ", playingForFirstTime);
             console.log("index: ", index, "  entry: ", newEntry, "  waitOutOfGame: ", waitOutOfGameCount);
@@ -210,6 +227,17 @@ function IsSituationSafe() {
             console.log("6*red green red green => PLAY");
             return true;
         } 
+
+        else if (sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {
+            console.log("6*red green red => PLAY");
+            return true;
+        }
+
+        else if (sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast < 1.80 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
+            console.log("7*red green => PLAY");
+            return true;
+        }
+
         else if (fourBeforeLast < 1.20 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {
             console.log("<1.2 green green <1.2 <1.2 => PLAY");
             return true;
@@ -218,8 +246,8 @@ function IsSituationSafe() {
             console.log("green <1.2 green green <1.2 => PLAY");
             return true;
         }        
-        else if (fourBeforeLast <= 1.20 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.40) {
-            console.log("<1.2  <1.2 green green <1.3  => PLAY");
+        else if (fourBeforeLast <= 1.20 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
+            console.log("<1.2  <1.2 green green <1.2  => PLAY");
             return true;
         }
         else if (fourBeforeLast <= 1.20 && threeBeforeLast <= 1.20 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
@@ -231,12 +259,81 @@ function IsSituationSafe() {
             console.log("red red <1.2 <1.2 <1.2 => PLAY");
             return true;
         }
+        else if (threeBeforeLast <= 1.20 && twoBeforeLast <= 1.20 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {
+            console.log("<1.2 <1.2 <1.2 <1.2 => PLAY");
+            return true;
+        }
+        else if (fourBeforeLast < 1.80 && threeBeforeLast <= 1.20 && twoBeforeLast < 1.80 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {
+            console.log("red 1.2 red <1.2 <1.2 => PLAY");
+            return true;
+        }
 
-        else if (fiveBeforeLast > 1.79 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
-            console.log("green red green red green red => PLAY");
+        else if (fourBeforeLast < 1.80 && threeBeforeLast <= 1.20 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
+            console.log("red <1.2 <1.2 green <1.2 => PLAY");
+            return true;
+        } 
+
+        else if (threeBeforeLast <= 1.20 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
+            console.log("<1.2 <1.2 green <1.2 => PLAY");
+            return true;
+        } 
+        else if (fiveBeforeLast <= 1.20 && fourBeforeLast <= 1.20 && threeBeforeLast > 1.79 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
+            console.log("<1.2 <1.2 green <1.2 green <1.2 => PLAY");
+            return true;
+        } 
+
+        else if (fiveBeforeLast <= 1.20 && fourBeforeLast <= 1.20 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {    // PLAY!
+            console.log("<1.2 <1.2 green green <1.2 <1.2 => PLAY");
             return true;
         } 
         
+        else if (sixBeforeLast <= 1.20 && fiveBeforeLast <= 1.20 && fourBeforeLast > 1.79 && threeBeforeLast > 1.79 && twoBeforeLast <= 1.20 && oneBeforeLast <= 1.20) {    // PLAY!
+            console.log("<1.2 <1.2 green green <1.2 <1.2 X => PLAY");
+            return true;
+        } 
+        
+
+        else if (sixBeforeLast <= 1.20 && fiveBeforeLast <= 1.20 && fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast <= 1.20) {    // PLAY!
+            console.log("<1.2 <1.2 green <1.2 green <1.2  X => PLAY");
+            return true;
+        } 
+
+        else if (fiveBeforeLast < 1.80 && fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
+            console.log("red green <1.2 X green <1.2 => PLAY");
+            return true;
+        } 
+        else if (fiveBeforeLast < 1.80 && fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
+            console.log("red green red red green <1.2 => PLAY");
+            return true;
+        } 
+
+        else if (sixBeforeLast <= 1.20 && fiveBeforeLast > 1.79 && fourBeforeLast <= 1.20 && threeBeforeLast > 1.79 && twoBeforeLast <= 1.20 && oneBeforeLast <= 1.20) {    // PLAY!
+            console.log("<1.2 green <1.2 green <1.2 <1.2  X => PLAY");
+            return true;
+        } 
+
+        else if (sixBeforeLast <= 1.20 && fiveBeforeLast > 1.79 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
+            console.log("<1.2 green red red red green <1.2 => PLAY");
+            return true;
+        }
+
+        else if (fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
+            console.log("red red green red green red => PLAY");
+            return true;
+        } 
+        else if (fiveBeforeLast > 1.79 && fourBeforeLast <= 1.20 && threeBeforeLast > 1.79 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
+            console.log("green <1.2 green <1.2 green red => PLAY");
+            return true;
+        }
+        else if (fiveBeforeLast > 1.79 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
+            console.log("green red green <1.2 green <1.2 => PLAY");
+            return true;
+        }
+        else if (fiveBeforeLast > 1.79 && fourBeforeLast <= 1.20 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
+            console.log("green <1.2 green red green <1.2 => PLAY");
+            return true;
+        }
+
         if (waitOutOfGameCount > 20 && loosesCount == looseThreshold + 1) {  // if it is first loose
             if (fourBeforeLast < 1.30 && threeBeforeLast <= 1.30 && twoBeforeLast <= 1.40 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
                 console.log("<1.3 <1.3 <1.4 green <1.2 => PLAY");
@@ -269,11 +366,11 @@ function MustHaveAfterAllLooses(ProfitArray) {
     var sum = 0;
     var bet = 0;
     for (var i = 0; i <= looseTolerance1; i++) {
-        bet = Math.round(((ProfitArray[i] + sum) - 0.4) / (index1 - 1));
+        bet = Math.round(((ProfitArray[i] + sum)) / (index1 - 1));
         sum += bet;
     }
     for (var i = looseTolerance1+1; i <= looseTolerance1 + looseTolerance2; i++) {
-        bet = Math.round(((ProfitArray[i] + sum) - 0.4) / (index2 - 1));
+        bet = Math.round(((ProfitArray[i] + sum)) / (index2 - 1));
         sum += bet;
     }
     return sum;
