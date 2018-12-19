@@ -9,7 +9,7 @@
              "48": "inject_48.png",
             "128": "inject_128.png" },  
     "content_scripts": [{
-      "matches": ["http://taak90in.space/games/crash/*"],
+      "matches": ["http://*/*"],
       "js": ["siniley.js"]
     }]
   }

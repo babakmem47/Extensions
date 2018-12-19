@@ -51,13 +51,14 @@ function CheckForNewBurstEveryOneSecond() {
 
             
             newEntry++;
+            var situationIsSafe = false;
             if (playing) {
                 if (newBurst < index) {   // loosing when playing: calculate loose count
                     loosesCount++;
                     loosesSum = betAmount + loosesSum;
                     if (IsSituationSafe()) {
                         index = 1.2;
-                        console.log("situaltion safe!");
+                        console.log("situation safe!");
                         situationIsSafe = true;
                     }
                     else {
@@ -74,7 +75,7 @@ function CheckForNewBurstEveryOneSecond() {
                     loosesSum = 0;
                     if (IsSituationSafe()) {
                         index = 1.2;
-                        console.log("situaltion safe!");
+                        console.log("situation safe!");
                         situationIsSafe = true;
                     }
                     else {
@@ -122,7 +123,9 @@ function CheckForNewBurstEveryOneSecond() {
 
           
             betAmount = Math.round(((ExpectedProfit[loosesCount] + loosesSum) - 0.4) / (index - 1));
-            console.log("looseCount: ", loosesCount, "  looseSum: ", loosesSum, "   betAmount: ", betAmount, "  interest: ", interest, "  nextAmount: ", nextNecessaryAmount);
+            if (situationIsSafe) {
+                betAmount += 500;
+            }console.log("looseCount: ", loosesCount, "  looseSum: ", loosesSum, "   betAmount: ", betAmount, "  interest: ", interest, "  nextAmount: ", nextNecessaryAmount);
             console.log("playing: ", playing, "  playingForFirsttime: ", playingForFirstTime);
             console.log("index: ", index, "  entry: ", newEntry, "  waitOutOfGame: ", waitOutOfGameCount);
 
@@ -166,160 +169,36 @@ function IsSituationSafe() {
         var sevenBeforeLast = historyOfBursts[historyOfBursts.length - 7];
         var eightBeforeLast = historyOfBursts[historyOfBursts.length - 7];
         console.log(lastBurst, oneBeforeLast, twoBeforeLast, threeBeforeLast, fourBeforeLast, fiveBeforeLast);
-        // play with maximum carefulness
-        if (oneBeforeLast > 1.20 && oneBeforeLast < 1.80 && lastBurst > 1.20 && lastBurst < 1.80) {                //  Not play : series of reds  
-            console.log("series of 2 big red => Not play");
-            return false;
-        }
-        else if (twoBeforeLast < 1.79 && oneBeforeLast > 1.79 && lastBurst > 1.79) {                              // Not play : red green green
-            console.log("red green green => Not play");
-            return false;
-        }
-        else if (twoBeforeLast > 1.79 && oneBeforeLast > 1.20 && oneBeforeLast < 1.79 && lastBurst > 1.79) {      // Not play : green red green
-            console.log("green red green => Not play");
-            return false;
-        }
-        else if (lastBurst > 10.00) {                                                                               // Not play : big fat green
-            console.log("big fat green => Not play");
-            return false;
-        }
+ 
 
-
-        // Play
-        else if (threeBeforeLast > 1.79 && twoBeforeLast <= 1.40 && oneBeforeLast > 1.79 && lastBurst <= 1.40) {    // PLAY!
-            console.log("green <1.4 green <1.4 => PLAY");
-            return true;
-        }
-        else if (threeBeforeLast > 1.79 && twoBeforeLast < 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {  // Play 
-            console.log("green red green <1.2 => PLAY");
-            return true;
-        }
-        
-        else if (sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
+        if (sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
             console.log("4*red green red green => PLAY");
             return true;
-        }  
+        }
         else if (sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
             console.log("4*red green green red green => PLAY");
             return true;
-        } 
+        }
         else if (sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
             console.log("4*red green red red green => PLAY");
             return true;
-        } 
+        }
         else if (eightBeforeLast < 1.80 && sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast > 1.79 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
             console.log("4*red green green green red green => PLAY");
             return true;
-        } 
+        }
         else if (sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
             console.log("5*red green red green => PLAY");
             return true;
-        } 
+        }
         else if (eightBeforeLast < 1.80 && sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
             console.log("5*red green green red green => PLAY");
             return true;
-        } 
+        }
         else if (eightBeforeLast < 1.80 && sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
             console.log("6*red green red green => PLAY");
             return true;
-        } 
-        else if (fourBeforeLast < 1.20 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {
-            console.log("<1.2 green green <1.2 <1.2 => PLAY");
-            return true;
         }
-        // else if (fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
-        //     console.log("green <1.2 green green <1.2 => PLAY");
-        //     return true;
-        // }        
-        else if (fourBeforeLast <= 1.20 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.40) {
-            console.log("<1.2  <1.2 green green <1.3  => PLAY");
-            return true;
-        }
-        else if (fourBeforeLast <= 1.20 && threeBeforeLast <= 1.20 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
-            console.log("<1.2 <1.2 <1.2 green <1.2  => PLAY");
-            return true;
-        }                
-        
-        else if (fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast <= 1.20 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {
-            console.log("red red <1.2 <1.2 <1.2 => PLAY");
-            return true;
-        }
-
-        else if (fiveBeforeLast > 1.79 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
-            console.log("green red green red green red => PLAY");
-            return true;
-        } 
-        
-        if (waitOutOfGameCount > 20 && loosesCount == looseThreshold + 1) {  // if it is first loose
-            // if (fourBeforeLast < 1.30 && threeBeforeLast <= 1.30 && twoBeforeLast <= 1.40 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
-            //     console.log("<1.3 <1.3 <1.4 green <1.2 => PLAY");
-            //     return true;
-            // }
-            if (fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
-                console.log("red green red green red => PLAY");
-                return true;
-            } 
-            // else if (threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
-            //     console.log("green red green red => PLAY");
-            //     return true;
-            // }
-        }
-        if (oneBeforeLast > 1.20 && oneBeforeLast < 1.80 && lastBurst > 1.20 && lastBurst < 1.80) {                //  Not play : series of reds  
-            console.log("series of 2 big red => Not play");
-            return false;
-        }
-        else if (twoBeforeLast < 1.79 && oneBeforeLast > 1.79 && lastBurst > 1.79) {                              // Not play : red green green
-            console.log("red green green => Not play");
-            return false;
-        }
-        else if (twoBeforeLast > 1.79 && oneBeforeLast > 1.20 && oneBeforeLast < 1.79 && lastBurst > 1.79) {      // Not play : green red green
-            console.log("green red green => Not play");
-            return false;
-        }
-        else if (lastBurst > 10.00) {                                                                               // Not play : big fat green
-            console.log("big fat green => Not play");
-            return false;
-        }
-
-
-        // Play
-        else if (threeBeforeLast > 1.79 && twoBeforeLast <= 1.40 && oneBeforeLast > 1.79 && lastBurst <= 1.40) {    // PLAY!
-            console.log("green <1.4 green <1.4 => PLAY");
-            return true;
-        }
-        else if (threeBeforeLast > 1.79 && twoBeforeLast < 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {  // Play 
-            console.log("green red green <1.2 => PLAY");
-            return true;
-        }
-        
-        else if (sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
-            console.log("4*red green red green => PLAY");
-            return true;
-        }  
-        else if (sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
-            console.log("4*red green green red green => PLAY");
-            return true;
-        } 
-        else if (sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
-            console.log("4*red green red red green => PLAY");
-            return true;
-        } 
-        else if (eightBeforeLast < 1.80 && sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast > 1.79 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
-            console.log("4*red green green green red green => PLAY");
-            return true;
-        } 
-        else if (sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
-            console.log("5*red green red green => PLAY");
-            return true;
-        } 
-        else if (eightBeforeLast < 1.80 && sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
-            console.log("5*red green green red green => PLAY");
-            return true;
-        } 
-        else if (eightBeforeLast < 1.80 && sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast > 1.79 && oneBeforeLast < 1.80 && lastBurst > 1.79) {
-            console.log("6*red green red green => PLAY");
-            return true;
-        } 
 
         else if (sevenBeforeLast < 1.80 && sixBeforeLast < 1.80 && fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {
             console.log("6*red green red => PLAY");
@@ -338,7 +217,7 @@ function IsSituationSafe() {
         else if (fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
             console.log("green <1.2 green green <1.2 => PLAY");
             return true;
-        }        
+        }
         else if (fourBeforeLast <= 1.20 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
             console.log("<1.2  <1.2 green green <1.2  => PLAY");
             return true;
@@ -346,12 +225,12 @@ function IsSituationSafe() {
         else if (fourBeforeLast <= 1.20 && threeBeforeLast <= 1.20 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
             console.log("<1.2 <1.2 <1.2 green <1.2  => PLAY");
             return true;
-        }                
-        
-        else if (fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast <= 1.20 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {
-            console.log("red red <1.2 <1.2 <1.2 => PLAY");
-            return true;
         }
+
+        // else if (fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast <= 1.20 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {
+        //     console.log("red red <1.2 <1.2 <1.2 => PLAY");
+        //     return true;
+        // }
         else if (threeBeforeLast <= 1.20 && twoBeforeLast <= 1.20 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {
             console.log("<1.2 <1.2 <1.2 <1.2 => PLAY");
             return true;
@@ -364,39 +243,52 @@ function IsSituationSafe() {
         else if (fourBeforeLast < 1.80 && threeBeforeLast <= 1.20 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
             console.log("red <1.2 <1.2 green <1.2 => PLAY");
             return true;
-        } 
+        }
 
         else if (threeBeforeLast <= 1.20 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
             console.log("<1.2 <1.2 green <1.2 => PLAY");
             return true;
-        } 
+        }
         else if (fiveBeforeLast <= 1.20 && fourBeforeLast <= 1.20 && threeBeforeLast > 1.79 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
             console.log("<1.2 <1.2 green <1.2 green <1.2 => PLAY");
             return true;
-        } 
+        }
+
+        else if (fiveBeforeLast <= 1.20 && fourBeforeLast <= 1.20 && threeBeforeLast > 1.79 && twoBeforeLast > 1.79 && oneBeforeLast <= 1.20 && lastBurst <= 1.20) {    // PLAY!
+            console.log("<1.2 <1.2 green green <1.2 <1.2 => PLAY");
+            return true;
+        }
+
+        else if (sixBeforeLast <= 1.20 && fiveBeforeLast <= 1.20 && fourBeforeLast > 1.79 && threeBeforeLast > 1.79 && twoBeforeLast <= 1.20 && oneBeforeLast <= 1.20) {    // PLAY!
+            console.log("<1.2 <1.2 green green <1.2 <1.2 X => PLAY");
+            return true;
+        }
+
+
         else if (sixBeforeLast <= 1.20 && fiveBeforeLast <= 1.20 && fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && twoBeforeLast > 1.79 && oneBeforeLast <= 1.20) {    // PLAY!
             console.log("<1.2 <1.2 green <1.2 green <1.2  X => PLAY");
             return true;
-        } 
+        }
 
         else if (fiveBeforeLast < 1.80 && fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
             console.log("red green <1.2 X green <1.2 => PLAY");
             return true;
-        } 
+        }
         else if (fiveBeforeLast < 1.80 && fourBeforeLast > 1.79 && threeBeforeLast <= 1.20 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
             console.log("red green red red green <1.2 => PLAY");
             return true;
-        } 
+        }
 
         else if (sixBeforeLast <= 1.20 && fiveBeforeLast > 1.79 && fourBeforeLast <= 1.20 && threeBeforeLast > 1.79 && twoBeforeLast <= 1.20 && oneBeforeLast <= 1.20) {    // PLAY!
             console.log("<1.2 green <1.2 green <1.2 <1.2  X => PLAY");
             return true;
-        } 
+        }
 
-        else if (fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
-            console.log("red red green red green red => PLAY");
+        else if (sixBeforeLast <= 1.20 && fiveBeforeLast > 1.79 && fourBeforeLast < 1.80 && threeBeforeLast < 1.80 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {    // PLAY!
+            console.log("<1.2 green red red red green <1.2 => PLAY");
             return true;
-        } 
+        }
+
         else if (fiveBeforeLast > 1.79 && fourBeforeLast <= 1.20 && threeBeforeLast > 1.79 && twoBeforeLast <= 1.20 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
             console.log("green <1.2 green <1.2 green red => PLAY");
             return true;
@@ -409,8 +301,12 @@ function IsSituationSafe() {
             console.log("green <1.2 green red green <1.2 => PLAY");
             return true;
         }
+        else if (fiveBeforeLast < 1.80 && fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
+            console.log("red red green red green red => PLAY");
+            return true;
+        }
 
-        if (waitOutOfGameCount > 20 && loosesCount == looseThreshold + 1) {  // if it is first loose
+        if (loosesCount < 10) {
             if (fourBeforeLast < 1.30 && threeBeforeLast <= 1.30 && twoBeforeLast <= 1.40 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {
                 console.log("<1.3 <1.3 <1.4 green <1.2 => PLAY");
                 return true;
@@ -418,12 +314,30 @@ function IsSituationSafe() {
             else if (fourBeforeLast < 1.80 && threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
                 console.log("red green red green red => PLAY");
                 return true;
-            } 
+            }
+            else if (threeBeforeLast > 1.79 && twoBeforeLast <= 1.40 && oneBeforeLast > 1.79 && lastBurst <= 1.40) {    // PLAY!
+                console.log("green <1.4 green <1.4 => PLAY");
+                return true;
+            }
+            else if (threeBeforeLast > 1.79 && twoBeforeLast < 1.79 && oneBeforeLast > 1.79 && lastBurst <= 1.20) {  // Play 
+                console.log("green red green <1.2 => PLAY");
+                return true;
+            }
+
+
             // else if (threeBeforeLast > 1.79 && twoBeforeLast < 1.80 && oneBeforeLast > 1.79 && lastBurst < 1.80) {    // PLAY!
             //     console.log("green red green red => PLAY");
             //     return true;
             // }
         }
+
+        if (loosesCount < 10) {
+            // if (oneBeforeLast <= 1.20 && lastBurst <= 1.20) {  // Play 
+            //     console.log("<1.2 <1.2 => PLAY");
+            //     return true;
+            // }
+        }
+
 
         
         return false;
